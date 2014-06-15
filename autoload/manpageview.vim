@@ -101,15 +101,21 @@ if !exists("g:manpageview_pgm_pm") && executable("perldoc")
  let g:manpageview_pgm_pm     = "perldoc"
  let g:manpageview_options_pm = "-f"
 endif
-if !exists("g:manpageview_php_url")
- let g:manpageview_php_url     = "http://www.php.net/"
-endif
-if !exists("g:manpageview_pgm_php") && (executable("links") || executable("elinks"))
+if !exists("g:manpageview_pgm_php")
 "  DechoWF "installed php help support via manpageview"
- let g:manpageview_pgm_php     = (executable("links")? "links" : "elinks")." -dump ".g:manpageview_php_url
- let g:manpageview_syntax_php  = "manphp"
- let g:manpageview_nospace_php = 1
- let g:manpageview_K_php       = "manpageview#ManPagePhp()"
+ if executable("pman")
+  let g:manpageview_pgm_php     = "pman"
+  let g:manpageview_syntax_php  = "man"
+  let g:manpageview_K_php       = "manpageview#ManPagePhp()"
+ elseif executable("links") || executable("elinks")
+  if !exists("g:manpageview_php_url")
+   let g:manpageview_php_url     = "http://www.php.net/"
+  endif
+  let g:manpageview_pgm_php     = (executable("links")? "links" : "elinks")." -dump ".g:manpageview_php_url
+  let g:manpageview_syntax_php  = "manphp"
+  let g:manpageview_nospace_php = 1
+  let g:manpageview_K_php       = "manpageview#ManPagePhp()"
+ endif
 endif
 if !exists("g:manpageview_gl_url")
  let g:manpageview_gl_url= "http://www.opengl.org/sdk/docs/man/xhtml/"
