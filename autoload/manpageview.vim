@@ -265,8 +265,12 @@ fun! manpageview#ManPageView(...) range
   if ext == ""
 "   DechoWF "(ManPageView) attempt to infer on filetype<".&ft.">"
 
+   " Fixed composite/multiple filetype bug
+   let filetypes = []
+   let filetypes += split(&ft, '\.')
+
    " filetype: vim
-   if &ft == "vim"
+   if match(filetypes, '^vim$') != -1
 "	DechoWF "(ManPageView) special vim handler"
     let s:specialhandler = "vim"
     let retval           = manpageview#ManPageVim(topic)
@@ -274,19 +278,19 @@ fun! manpageview#ManPageView(...) range
 	return retval
 
    " filetype: perl
-   elseif &ft == "perl" || &ft == "perldoc"
+   elseif match(filetypes, '^\(perl\|perldoc\)$') !=-1
 "	DechoWF "(ManPageView) special perl handler"
     let s:specialhandler = "perl"
     let ext              = "pl"
 
    " filetype:  php
-   elseif &ft == "php" || &ft == "manphp"
+   elseif match(filetypes, '^\(php\|manphp\)$') !=-1
 "	DechoWF "(ManPageView) special php handler"
     let s:specialhandler = "php"
     let ext              = "php"
 
 	" filetype:  python
-   elseif &ft == "python" || &ft == "pydoc"
+   elseif match(filetypes, '^\(python\|pydoc\)$') !=-1
 "	DechoWF "(ManPageView) special python handler"
     let s:specialhandler = "python"
     let ext              = "py"
@@ -298,7 +302,7 @@ fun! manpageview#ManPageView(...) range
     let ext              = "i"
 
    " filetype: tex
-   elseif &ft == "tex"
+   elseif match(filetypes, '^tex$') !=-1
 "	DechoWF "(ManPageView) special tex handler"
     let s:specialhandler = "tex"
     let ext              = "tex"
